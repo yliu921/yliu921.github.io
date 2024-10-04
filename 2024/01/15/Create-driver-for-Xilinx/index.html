@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>0. Driver Development for Xilinx MPSoC FPGA | Home</title>
+  <meta name="description" content="0. Create a kernel module using petalinux Use the command below to create a kernel module 123456petalinux -t modules --name ktest --enable[Usage]petalinux-create -t modules --name mymodule --enable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0. Driver Development for Xilinx MPSoC FPGA">
+<meta property="og:url" content="https://yifeiliu.dev/2024/01/15/Create-driver-for-Xilinx/index.html">
+<meta property="og:site_name" content="Yifei Liu">
+<meta property="og:description" content="0. Create a kernel module using petalinux Use the command below to create a kernel module 123456petalinux -t modules --name ktest --enable[Usage]petalinux-create -t modules --name mymodule --enable">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-01-15T21:59:46.000Z">
+<meta property="article:modified_time" content="2024-10-04T01:44:36.308Z">
+<meta property="article:author" content="Yifei Liu">
+<meta property="article:tag" content="FPGA">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://yifeiliu.dev/2024/01/15/Create-driver-for-Xilinx/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Yifei Liu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/yliu921" target="_blank">
+          <img class="img-rotate" src="/images/cat.gif" width="128" height="128">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Yifei Liu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Tinker, ASIC engineer.</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> United States</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphic/">Computer Graphic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/FPGA/">FPGA</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SystemVerilog-Tutorial/">SystemVerilog Tutorial</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Usage-of-Linux/">Usage of Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Using-pthread/">Using pthread</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/plan/">plan</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/FPGA/" style="font-size: 14px;">FPGA</a> <a href="/tags/Linux/" style="font-size: 13.5px;">Linux</a> <a href="/tags/Raterization/" style="font-size: 13px;">Raterization</a> <a href="/tags/SystemVerilog/" style="font-size: 13.5px;">SystemVerilog</a> <a href="/tags/TFTP/" style="font-size: 13px;">TFTP</a> <a href="/tags/Writing-Plan/" style="font-size: 13px;">Writing Plan</a> <a href="/tags/bash/" style="font-size: 13px;">bash</a> <a href="/tags/pthread/" style="font-size: 13px;">pthread</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">October 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Create-driver-for-Xilinx" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      0. Driver Development for Xilinx MPSoC FPGA
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/01/15/Create-driver-for-Xilinx/" class="article-date">
+	  <time datetime="2024-01-15T21:59:46.000Z" itemprop="datePublished">2024-01-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/FPGA/">FPGA</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/FPGA/" rel="tag">FPGA</a>, <a class="article-tag-link-link" href="/tags/Linux/" rel="tag">Linux</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/01/15/Create-driver-for-Xilinx/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="0-create-a-kernel-module-using-petalinux"><a class="markdownIt-Anchor" href="#0-create-a-kernel-module-using-petalinux"></a> 0. Create a kernel module using petalinux</h2>
+<p>Use the command below to create a kernel module</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">petalinux -t modules --name ktest --<span class="built_in">enable</span></span><br><span class="line">[Usage]</span><br><span class="line">petalinux-create -t modules --name mymodule --<span class="built_in">enable</span></span><br><span class="line">    -t          <span class="built_in">type</span>: project, apps, modules </span><br><span class="line">    --name, -n  specify the name <span class="keyword">for</span> a component or project</span><br><span class="line">    --<span class="built_in">enable</span>    <span class="built_in">enable</span> the apps or modules <span class="keyword">for</span> the project</span><br></pre></td></tr></table></figure>
+<p>This command will creat the file and directory <code>project-spec/meta-user/recipes-modules/ktest</code> as following</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| files</span><br><span class="line">|    - ktest.c</span><br><span class="line">|    - Makefile</span><br><span class="line">| ktest.bb</span><br></pre></td></tr></table></figure>
+<h2 id="1-modify-the-base-module"><a class="markdownIt-Anchor" href="#1-modify-the-base-module"></a> 1. Modify the base module</h2>
+<p>We first modify the <code>ktest.c</code> file in the directory <code>files</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/uaccess.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/proc_fs.h&gt;</span></span></span><br><span class="line"><span class="comment">// Module metadata</span></span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;Hello world driver&quot;</span>);</span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line"><span class="comment">// Custom init and exit methods</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">custom_init</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="comment">/*When a function is declared as static in C, it means that the function has</span></span><br><span class="line"><span class="comment">     internal linkage, which restricts its visibility to the translation unit </span></span><br><span class="line"><span class="comment">     (source file) where it is defined. In other words, the function is only </span></span><br><span class="line"><span class="comment">     accessible within the same source file.*/</span></span><br><span class="line">    printk(KERN_INFO <span class="string">&quot;Hello world driver loaded.\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">void</span> __exit <span class="title function_">custom_exit</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    printk(KERN_INFO <span class="string">&quot;Goodbye my friend...\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Register the init and exit function</span></span><br><span class="line"><span class="comment">// module_init() will either be called during do_initcalls() (if builtin)</span></span><br><span class="line"><span class="comment">// or at module insertion time (if a module). There can only be one per module.</span></span><br><span class="line">module_init(custom_init);</span><br><span class="line"><span class="comment">// module_exit() will wrap the driver clean-up code with cleanup_module() when </span></span><br><span class="line"><span class="comment">// used with rmmod when the driver is a module. If the driver is statically </span></span><br><span class="line"><span class="comment">// compiled into the kernel, module_exit() has no effect. There can only be one </span></span><br><span class="line"><span class="comment">// per module.</span></span><br><span class="line">module_exit(custom_exit);</span><br></pre></td></tr></table></figure>
+<p>Then, we update the <code>ktest.bb</code> with appending the following configuration:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KERNEL_MODULE_AUTOLOAD += <span class="string">&quot;ktest&quot;</span></span><br></pre></td></tr></table></figure>
+<p>This configuration will automatically load the kernel while booting.</p>
+<h2 id="2-compile-the-kernel-image-and-boot"><a class="markdownIt-Anchor" href="#2-compile-the-kernel-image-and-boot"></a> 2. Compile the kernel image and boot</h2>
+<h2 id="3-test-the-kernel"><a class="markdownIt-Anchor" href="#3-test-the-kernel"></a> 3. Test the kernel</h2>
+<p>After booting the kernel,</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ dmesg | grep <span class="string">&quot;Hello&quot;</span></span><br><span class="line">[   19.061541] Hello world driver loaded.</span><br><span class="line">$ rmmod ktest &amp;&amp; dmesg | grep <span class="string">&quot;Goodbye&quot;</span></span><br><span class="line">[   97.127431] Goodbye my friend...</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-footer">
+      <!-- <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://yifeiliu.dev/2024/01/15/Create-driver-for-Xilinx/" title="0. Driver Development for Xilinx MPSoC FPGA" target="_blank" rel="external">https://yifeiliu.dev/2024/01/15/Create-driver-for-Xilinx/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/yliu921" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/cat.gif" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/yliu921" target="_blank"><span class="text-dark">Yifei Liu</span><small class="ml-1x">Tinker, ASIC engineer.</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+ -->
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2024/01/16/The-Graphics-Pipeline/" title="The Graphics Pipeline"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2024/01/08/Generate-persistent-ssh-key-for-Xilinx-MPSoC-Linux-XLNXw/" title="Generate persistent ssh key for Xilinx MPSoC Linux (XLNX)"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+    <!-- <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-77CZM18X5N', 'auto');
+ga('send', 'pageview');
+
+</script> -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-77CZM18X5N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-77CZM18X5N');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

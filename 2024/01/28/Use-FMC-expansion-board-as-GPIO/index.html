@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Use FMC expansion for GPIO | Home</title>
+  <meta name="description" content="This post will introduce how to use it as a GPIO board with a clock divider example. This work will use the following devices:  ZCU106 FPGA board ALINX FH1010 expansion Ports Digilent Analog Discovery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Use FMC expansion for GPIO">
+<meta property="og:url" content="https://yifeiliu.dev/2024/01/28/Use-FMC-expansion-board-as-GPIO/index.html">
+<meta property="og:site_name" content="Yifei Liu">
+<meta property="og:description" content="This post will introduce how to use it as a GPIO board with a clock divider example. This work will use the following devices:  ZCU106 FPGA board ALINX FH1010 expansion Ports Digilent Analog Discovery">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://yifeiliu.dev/images/FMC_expansion.png">
+<meta property="og:image" content="https://yifeiliu.dev/images/Frequency.png">
+<meta property="article:published_time" content="2024-01-28T22:39:44.000Z">
+<meta property="article:modified_time" content="2024-10-04T01:44:36.308Z">
+<meta property="article:author" content="Yifei Liu">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yifeiliu.dev/images/FMC_expansion.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://yifeiliu.dev/2024/01/28/Use-FMC-expansion-board-as-GPIO/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Yifei Liu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/yliu921" target="_blank">
+          <img class="img-rotate" src="/images/cat.gif" width="128" height="128">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Yifei Liu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Tinker, ASIC engineer.</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> United States</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphic/">Computer Graphic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/FPGA/">FPGA</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SystemVerilog-Tutorial/">SystemVerilog Tutorial</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Usage-of-Linux/">Usage of Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Using-pthread/">Using pthread</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/plan/">plan</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/FPGA/" style="font-size: 14px;">FPGA</a> <a href="/tags/Linux/" style="font-size: 13.5px;">Linux</a> <a href="/tags/Raterization/" style="font-size: 13px;">Raterization</a> <a href="/tags/SystemVerilog/" style="font-size: 13.5px;">SystemVerilog</a> <a href="/tags/TFTP/" style="font-size: 13px;">TFTP</a> <a href="/tags/Writing-Plan/" style="font-size: 13px;">Writing Plan</a> <a href="/tags/bash/" style="font-size: 13px;">bash</a> <a href="/tags/pthread/" style="font-size: 13px;">pthread</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">October 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Use-FMC-expansion-board-as-GPIO" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Use FMC expansion for GPIO
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/01/28/Use-FMC-expansion-board-as-GPIO/" class="article-date">
+	  <time datetime="2024-01-28T22:39:44.000Z" itemprop="datePublished">2024-01-28</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/FPGA/">FPGA</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/FPGA/" rel="tag">FPGA</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/01/28/Use-FMC-expansion-board-as-GPIO/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>This post will introduce how to use it as a GPIO board with a clock divider example.<br />
+This work will use the following devices:</p>
+<ul>
+<li>ZCU106 FPGA board</li>
+<li>ALINX FH1010 expansion Ports</li>
+<li>Digilent Analog Discovery 2</li>
+</ul>
+<p>The software will be used:</p>
+<ul>
+<li>Vivado 2020.2 and petalinux</li>
+<li><a target="_blank" rel="noopener" href="https://china.xilinx.com/member/forms/download/design-license.html?cid=f9c3f796-9b83-4261-bda7-7f56b9210428&amp;filename=rdf0450-zcu106-system-controller-c-2019-1.zip">Xilinx system controller</a></li>
+</ul>
+<p><img src="/images/FMC_expansion.png" alt="FMC" /></p>
+<h2 id="clock-divider-design"><a class="markdownIt-Anchor" href="#clock-divider-design"></a> Clock divider design</h2>
+<ol>
+<li>Create an AXI-Lite IP and modify the axi interface IO. The AXI Lite IP comes with 4 registers and we will use the register 0 to store the the dividend.</li>
+</ol>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> clk_div_v1 (</span><br><span class="line">    <span class="comment">// axi ports</span></span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">output</span> clk_div);</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Modify the AXI IP</li>
+</ol>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> clk_div_v1_S00_AXI(</span><br><span class="line">    <span class="comment">// axi ports</span></span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> clk_div</span><br><span class="line">);</span><br><span class="line">    <span class="comment">// Add user logic here</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>]cnt;</span><br><span class="line">    <span class="keyword">wire</span> en = slv_reg0 != <span class="number">0</span>; <span class="comment">// slv_reg0 is the register 0. When it&#x27;s 0, we would disable the clock divider. </span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~S_AXI_ARESETN) <span class="keyword">begin</span></span><br><span class="line">            cnt &lt;= <span class="number">32&#x27;h0000_0000</span>;</span><br><span class="line">            clk_div &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(en) <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(cnt == slv_reg0 &gt;&gt;<span class="number">1</span>) <span class="keyword">begin</span> <span class="comment">// every slv_reg0/2, flip the output clock</span></span><br><span class="line">                clk_div &lt;= ~clk_div;</span><br><span class="line">                cnt &lt;= <span class="number">32&#x27;h0000_0000</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                cnt &lt;= cnt + <span class="number">32&#x27;h0000_0001</span>;</span><br><span class="line">       <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// end user logic</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<h2 id="block-design"><a class="markdownIt-Anchor" href="#block-design"></a> Block Design</h2>
+<p>Create the block as following:</p>
+<ul>
+<li>Add <code>Clocking Wizard</code> IP and set the <code>clk_out1</code> to <code>10MHz</code>.</li>
+<li>Create the user constraint file for the generated clock and I/O:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set_property IOSTANDARD LVCMOS18 [get_ports clk_div]</span><br><span class="line">set_property PACKAGE_PIN B11 [get_ports clk_div]</span><br><span class="line">create_clock  -name clk_out1 -period 100ns  </span><br></pre></td></tr></table></figure>
+<p>In this example, we are using the <code>LA23_P</code> I/O port to output the generated clock to the oscilloscope. <code>LA23_P</code> can be used as a single ended I/O and it’s voltage is set to 1.8V. It’s connected to the <code>PIN8</code> of <code>J2</code> in the ALINX expansion board.</p>
+<p>The connection between the FPGA I/O pin to the expansion board can be found at <a target="_blank" rel="noopener" href="https://docs.xilinx.com/v/u/en-US/ug1244-zcu106-eval-bd">UG1244</a> and <a target="_blank" rel="noopener" href="https://alinx.com/public/upload/file/FL1010_User_Manual.pdf">FL1010 user manual</a>.</p>
+<p>Next synthesis the project in Vivado and generate the firmware in Petalinux.</p>
+<h2 id="setup-the-vadj-of-the-fpga"><a class="markdownIt-Anchor" href="#setup-the-vadj-of-the-fpga"></a> Setup the <code>Vadj</code> of the FPGA</h2>
+<p>In ZCU106, the configuration of <code>Vadj</code> affects the output voltage of the I/O ports in the expansion board. However, it’s 0V by default. Therefore, we need to use the <code>System Control</code> application (in the pre-request) to configure the ZCU106 before using the I/O ports. This step needs a Windows PC to run the application. To setup the <code>Vadj</code> just click the button<br />
+<a href="/images/SC_Config.png">Configuration the Vadj</a></p>
+<h2 id="boot-and-test-the-io"><a class="markdownIt-Anchor" href="#boot-and-test-the-io"></a> Boot and Test the IO</h2>
+<p>The address the memory-mapped register of the clock divider IP is mapped to the <code>0xA0000000</code>. After booting the fpga (with firmware), ssh into the FPGA.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ devmem 0xA0000000 w 1000 <span class="comment"># write a word to the memory mapped register</span></span><br><span class="line">                           <span class="comment"># it&#x27;s divided the clk_out1 (10MHz) with 1000   </span></span><br></pre></td></tr></table></figure>
+<p>The output looks like this:<br />
+<img src="/images/Frequency.png" alt="Divided frequency" /></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <!-- <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://yifeiliu.dev/2024/01/28/Use-FMC-expansion-board-as-GPIO/" title="Use FMC expansion for GPIO" target="_blank" rel="external">https://yifeiliu.dev/2024/01/28/Use-FMC-expansion-board-as-GPIO/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/yliu921" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/cat.gif" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/yliu921" target="_blank"><span class="text-dark">Yifei Liu</span><small class="ml-1x">Tinker, ASIC engineer.</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+ -->
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2024/02/10/1-Linux-driver-development/" title="1. Linux driver development"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2024/01/21/Usage-of-bash-script/" title="Usage of bash script"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+    <!-- <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-77CZM18X5N', 'auto');
+ga('send', 'pageview');
+
+</script> -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-77CZM18X5N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-77CZM18X5N');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

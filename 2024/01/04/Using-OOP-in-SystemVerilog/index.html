@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>2. Using OOP in SystemVerilog | Home</title>
+  <meta name="description" content="Using Obejcts Using class in Sv is analogy to C++, refering to variables and routines in an object with the . notation. 1234BusTran b;b &#x3D; new;b.addr &#x3D; 32&#x27;h42;b.dispaly(); &#x2F;&#x2F; Call a routine In st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2. Using OOP in SystemVerilog">
+<meta property="og:url" content="https://yifeiliu.dev/2024/01/04/Using-OOP-in-SystemVerilog/index.html">
+<meta property="og:site_name" content="Yifei Liu">
+<meta property="og:description" content="Using Obejcts Using class in Sv is analogy to C++, refering to variables and routines in an object with the . notation. 1234BusTran b;b &#x3D; new;b.addr &#x3D; 32&#x27;h42;b.dispaly(); &#x2F;&#x2F; Call a routine In st">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://yifeiliu.dev/images/01.ObjectCopy.png">
+<meta property="article:published_time" content="2024-01-05T01:46:29.000Z">
+<meta property="article:modified_time" content="2024-10-04T01:44:36.308Z">
+<meta property="article:author" content="Yifei Liu">
+<meta property="article:tag" content="SystemVerilog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yifeiliu.dev/images/01.ObjectCopy.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://yifeiliu.dev/2024/01/04/Using-OOP-in-SystemVerilog/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Yifei Liu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/yliu921" target="_blank">
+          <img class="img-rotate" src="/images/cat.gif" width="128" height="128">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Yifei Liu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Tinker, ASIC engineer.</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> United States</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphic/">Computer Graphic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/FPGA/">FPGA</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SystemVerilog-Tutorial/">SystemVerilog Tutorial</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Usage-of-Linux/">Usage of Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Using-pthread/">Using pthread</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/plan/">plan</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/FPGA/" style="font-size: 14px;">FPGA</a> <a href="/tags/Linux/" style="font-size: 13.5px;">Linux</a> <a href="/tags/Raterization/" style="font-size: 13px;">Raterization</a> <a href="/tags/SystemVerilog/" style="font-size: 13.5px;">SystemVerilog</a> <a href="/tags/TFTP/" style="font-size: 13px;">TFTP</a> <a href="/tags/Writing-Plan/" style="font-size: 13px;">Writing Plan</a> <a href="/tags/bash/" style="font-size: 13px;">bash</a> <a href="/tags/pthread/" style="font-size: 13px;">pthread</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">October 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Using-OOP-in-SystemVerilog" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2. Using OOP in SystemVerilog
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/01/04/Using-OOP-in-SystemVerilog/" class="article-date">
+	  <time datetime="2024-01-05T01:46:29.000Z" itemprop="datePublished">2024-01-04</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/SystemVerilog-Tutorial/">SystemVerilog Tutorial</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/SystemVerilog/" rel="tag">SystemVerilog</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/01/04/Using-OOP-in-SystemVerilog/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="using-obejcts"><a class="markdownIt-Anchor" href="#using-obejcts"></a> Using Obejcts</h2>
+<p>Using class in Sv is analogy to C++, refering to variables and routines in an object with the <code>.</code> notation.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BusTran b;</span><br><span class="line">b = <span class="keyword">new</span>;</span><br><span class="line">b<span class="variable">.addr</span> = <span class="number">32&#x27;h42</span>;</span><br><span class="line">b<span class="variable">.dispaly</span>(); <span class="comment">// Call a routine</span></span><br></pre></td></tr></table></figure>
+<p>In <strong>strict OOP</strong>, the only access to variables in an object should be through its public methods such as <code>get()</code> and <code>put()</code>.<br />
+While the get() and put() methods are fine for compilers, GUIs, and APIs, you should stick with public variables that can be directly accessed anywhere in the testbench.</p>
+<h2 id="static-variables-vs-global-variables"><a class="markdownIt-Anchor" href="#static-variables-vs-global-variables"></a> Static Variables vs. Global Variables</h2>
+<p>Sometimes, we need a variable that is shared by all objects of a certain type.<br />
+Without OOP, we would probably create a global variable, which is used by one small piece of code, but is visible to the entire testbench.</p>
+<h3 id="using-static-variable"><a class="markdownIt-Anchor" href="#using-static-variable"></a> Using Static variable</h3>
+<p>Example, creating static variable inside a class.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> BusTran;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>; <span class="comment">// Number of objects created, shared across objects.</span></span><br><span class="line">    <span class="keyword">int</span> id; <span class="comment">// not static, each object has its own copy. </span></span><br><span class="line">            <span class="comment">// track objects flow through design</span></span><br><span class="line">    <span class="comment">// Unique instance ID</span></span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">new</span>; <span class="comment">// COnstructor</span></span><br><span class="line">        id = count++; <span class="comment">// Set ID, and change the value of count</span></span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"></span><br><span class="line">BusTran b1, b2;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    b1 = <span class="keyword">new</span>; <span class="comment">// First object, id = 0;</span></span><br><span class="line">    b2 = <span class="keyword">new</span>; <span class="comment">// 2nd object, id = 1;</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>Each time a new object is constructed, it is tagged with a unique value, and count is incremented.<br />
+SystemVerilog does not allow printing the address of an object, but we can create an ID field. Whenever tempting to make a global variable, consider making a class-level static variable.</p>
+<h3 id="initializing-static-variables"><a class="markdownIt-Anchor" href="#initializing-static-variables"></a> Initializing static variables</h3>
+<p>Cannot do this in the class constructor, because it’s called for every single new object.<br />
+Intead, using the <code>initial</code> block before the first object is constructed.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="keyword">static</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">task</span> initialize(<span class="keyword">int</span> val);</span><br><span class="line">        count = val;</span><br><span class="line">    <span class="keyword">endtask</span></span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> s; <span class="comment">// s is still a null pointer</span></span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    s<span class="variable">.initialize</span>(<span class="number">42</span>); <span class="comment">// This is legal, as the task only uses static variables </span></span><br><span class="line">                      <span class="comment">// that are not created in the constructor</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="class-routines-method"><a class="markdownIt-Anchor" href="#class-routines-method"></a> Class Routines (Method)</h3>
+<p>A routine (a.k.a. method) in a class is just a task or function defined inside the scope of the class.</p>
+<h3 id="define-routines-outside-of-the-class"><a class="markdownIt-Anchor" href="#define-routines-outside-of-the-class"></a> Define Routines Outside of the Class</h3>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> BusTran;</span><br><span class="line">    <span class="keyword">bit</span> [<span class="number">31</span>:<span class="number">0</span>] addr, crc, data[<span class="number">8</span>];</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">function</span> <span class="keyword">void</span> display();</span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"><span class="comment">// class body(BusTran) class scope opertater(::) method(display)</span></span><br><span class="line"><span class="keyword">function</span> <span class="keyword">void</span> BusTran::display(); <span class="comment">// this is a prototype</span></span><br><span class="line">    <span class="built_in">$display</span>(<span class="string">&quot;@%0d: BusTran addr=%h, crc=%h&quot;</span>, addr, crc);</span><br><span class="line">    <span class="built_in">$write</span>(<span class="string">&quot;\tdata[0-7]=&quot;</span>);</span><br><span class="line">    <span class="keyword">foreach</span> (data[i]) </span><br><span class="line">        <span class="built_in">$write</span>(data[i]);</span><br><span class="line">    <span class="built_in">$display</span>();</span><br><span class="line"><span class="keyword">endfunction</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> PCI_Tran;</span><br><span class="line">    <span class="keyword">bit</span> [<span class="number">31</span>:<span class="number">0</span>] addr, data; <span class="comment">// Use realistic names</span></span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">function</span> <span class="keyword">void</span> display();</span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"><span class="keyword">function</span> <span class="keyword">void</span> PCI_Tran::display();</span><br><span class="line">    <span class="built_in">$display</span>(<span class="string">&quot;@%0d: PCI: addr=%h, data=%h&quot;</span>, addr, data);</span><br><span class="line"><span class="keyword">endfunction</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Broken;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">function</span> <span class="keyword">void</span> display;</span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"><span class="keyword">function</span> <span class="keyword">void</span> display; <span class="comment">// Missing Broken::</span></span><br><span class="line">    <span class="built_in">$display</span>(<span class="string">&quot;Broken: id=%0d&quot;</span>, id); <span class="comment">// Error, id not found</span></span><br><span class="line"><span class="keyword">endfunction</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="scoping-rules"><a class="markdownIt-Anchor" href="#scoping-rules"></a> Scoping rules</h2>
+<p>A scope is a block of code such as a module, program, task, function, class, or begin - end block. The for and foreach loops automatically create a block so that an index variable can be declared or created local to the scope of the loop.</p>
+<p><strong>Declare all your variables in the smallest scope that encloses all uses of the variable</strong>.</p>
+<h2 id="using-one-class-inside-another"><a class="markdownIt-Anchor" href="#using-one-class-inside-another"></a> Using One class Inside Another</h2>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> BusTran;</span><br><span class="line">    <span class="keyword">bit</span> [<span class="number">31</span>:<span class="number">0</span>]addr, crc, data[<span class="number">8</span>];</span><br><span class="line">    Statistics stats; <span class="comment">// a hanlder of another class</span></span><br><span class="line">    <span class="comment">// remember to instantiaste the objects,</span></span><br><span class="line">    <span class="comment">// otherwise stats os null and the call to start fails.</span></span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">new</span>();</span><br><span class="line">        stats = <span class="keyword">new</span>(); <span class="comment">// best to instantiate in the constructor</span></span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">task</span> create_packet();</span><br><span class="line">        stats<span class="variable">.start</span>();</span><br><span class="line">    <span class="keyword">endtask</span></span><br><span class="line"><span class="keyword">endclass</span></span><br></pre></td></tr></table></figure>
+<h3 id="compilation-order-issue"><a class="markdownIt-Anchor" href="#compilation-order-issue"></a> Compilation order issue</h3>
+<p>Sometimes you need to compile a class that includes another class that is not yet defined. The declaration of the included class’s handle causes an error, as the compiler does not recognize the new type. Declare the class name with a <strong>typedef</strong> statement, as shown below.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">class</span> Statistics;</span><br><span class="line"><span class="keyword">class</span> BusTran;</span><br><span class="line">Statistics stats;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"><span class="keyword">class</span> Statistics;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">endclass</span></span><br></pre></td></tr></table></figure>
+<h3 id="dynamic-obejcts"><a class="markdownIt-Anchor" href="#dynamic-obejcts"></a> Dynamic Obejcts</h3>
+<p>Use <strong>ref</strong> to pass the address of scalar variable (noarray, nonobject), so the routine can modify it.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Transmit a packet onto a 32-bit bus</span></span><br><span class="line"><span class="keyword">task</span> transmit(BusTran bt);</span><br><span class="line">    CBbus<span class="variable">.rx_data</span> &lt;= bt<span class="variable">.data</span>;</span><br><span class="line">    bt<span class="variable">.timestamp</span> = <span class="built_in">$time</span>; <span class="comment">// cannot modify the handle, need to use ref</span></span><br><span class="line"><span class="keyword">endtask</span></span><br><span class="line">BusTran b;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    b = <span class="keyword">new</span>();</span><br><span class="line">    b<span class="variable">.addr</span> = <span class="number">42</span>;</span><br><span class="line">    transmit(b);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="modifying-objects-in-flight"><a class="markdownIt-Anchor" href="#modifying-objects-in-flight"></a> Modifying objects in flight</h3>
+<p>A very common mistake is forgetting to create a new object for each transaction in the testbench,</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">task</span> generator_bad(<span class="keyword">int</span> n);</span><br><span class="line">    BusTran b;</span><br><span class="line">    b = <span class="keyword">new</span>();</span><br><span class="line">    <span class="comment">// Create one new object</span></span><br><span class="line">    <span class="keyword">repeat</span> (n) <span class="keyword">begin</span></span><br><span class="line">        b<span class="variable">.addr</span> = <span class="built_in">$random</span>();</span><br><span class="line">        <span class="comment">// Initialize variables</span></span><br><span class="line">        <span class="built_in">$display</span>(<span class="string">&quot;Sending addr=%h&quot;</span>, b<span class="variable">.addr</span>);</span><br><span class="line">        transmit(b);</span><br><span class="line">        <span class="comment">// Send it into the DUT</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endtask</span></span><br></pre></td></tr></table></figure>
+<p>So every time through the loop, <code>generator_bad</code> changes the object at the same time it is being transmitted. When you run this, the <code>$display</code> shows many addr values, but all transmitted <code>BusTrans</code> have the same value of <code>addr</code>. The bug occurs if <code>transmit</code> stores the object and keeps using it even after <code>transmit</code> returns. If your <code>transmit</code> task does not keep a reference to the object, you can recycle the same object over and over.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">task</span> generator_good(<span class="keyword">int</span> n);</span><br><span class="line">    BusTran b;</span><br><span class="line">    <span class="keyword">repeat</span> (n) <span class="keyword">begin</span></span><br><span class="line">        b = <span class="keyword">new</span>(); <span class="comment">// Create one new object</span></span><br><span class="line">        b<span class="variable">.addr</span> = <span class="built_in">$random</span>();<span class="comment">// Initialize variables</span></span><br><span class="line">        <span class="built_in">$display</span>(<span class="string">&quot;Sending addr=%h&quot;</span>, b<span class="variable">.addr</span>);</span><br><span class="line">        transmit(b); <span class="comment">// Send it into the DUT</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endtask</span></span><br></pre></td></tr></table></figure>
+<p>You can make arrays of handles, each of which refers to an object, e.g., <code>BusTran Barray[10]</code>.</p>
+<h2 id="copying-objects"><a class="markdownIt-Anchor" href="#copying-objects"></a> Copying objects</h2>
+<p>You may want to make a copy of an object to keep a routine from modifying the original, or in a generator to preserve the constraints. You can either use the simple, built-in copy available with <code>new</code> , or you can write your own for more complex classes.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> BusTrain;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"></span><br><span class="line">BusTran src, dst;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    src = <span class="keyword">new</span>;</span><br><span class="line">    dst = <span class="keyword">new</span> src;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>This is a shallow copy, blindly transcribing values from source to destination. <strong>If the class contains a handle to another class, only the top level object is copied by <code>new</code>, not the lower level one</strong>. Example as following,</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> BusTran;</span><br><span class="line">    <span class="keyword">bit</span> [<span class="number">31</span>:<span class="number">0</span>] addr, crc, data[<span class="number">8</span>];</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    Statistics stats;</span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">new</span>;</span><br><span class="line">        stats = <span class="keyword">new</span>;</span><br><span class="line">        id = count++;</span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"></span><br><span class="line">BusTran src, dst;</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    src = <span class="keyword">new</span>;</span><br><span class="line">    <span class="comment">// Create first object</span></span><br><span class="line">    src<span class="variable">.stats</span><span class="variable">.startT</span> = <span class="number">42</span>;</span><br><span class="line">    dst = <span class="keyword">new</span> src;</span><br><span class="line">    <span class="comment">// Copy src to dst</span></span><br><span class="line">    dst<span class="variable">.stats</span><span class="variable">.startT</span> = <span class="number">84</span>; <span class="comment">// Changes stats for dst &amp; src</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/01.ObjectCopy.png" alt="Objects and handles after copy with new" /></p>
+<p>Note:</p>
+<ul>
+<li>it doesn’t call the custormized <code>new</code> function.</li>
+<li>both objects point to the same <code>Statistics</code> object and both have the same <code>id</code>.</li>
+</ul>
+<h3 id="writing-your-own-simple-copy-function"><a class="markdownIt-Anchor" href="#writing-your-own-simple-copy-function"></a> Writing your own simple copy function</h3>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> BusTran;</span><br><span class="line">    <span class="keyword">bit</span> [<span class="number">31</span>:<span class="number">0</span>] addr, crc, data[<span class="number">8</span>];</span><br><span class="line">    Statistics stats;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">new</span>;</span><br><span class="line">        stats = <span class="keyword">new</span>;</span><br><span class="line">        id = count++;</span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line">    <span class="keyword">function</span> BusTran copy;</span><br><span class="line">        copy = <span class="keyword">new</span>;</span><br><span class="line">        copy<span class="variable">.addr</span> = addr;</span><br><span class="line">        copy<span class="variable">.crc</span> = crc;</span><br><span class="line">        copy<span class="variable">.data</span> = data;</span><br><span class="line">        copy<span class="variable">.stats</span> = stats<span class="variable">.copy</span>;</span><br><span class="line">        id = count++;</span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line"><span class="keyword">endclass</span></span><br></pre></td></tr></table></figure>
+<p><strong>Note that you also need to write a copy for the Statistics class, and every other class in the hierarchy</strong>.</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <!-- <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://yifeiliu.dev/2024/01/04/Using-OOP-in-SystemVerilog/" title="2. Using OOP in SystemVerilog" target="_blank" rel="external">https://yifeiliu.dev/2024/01/04/Using-OOP-in-SystemVerilog/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/yliu921" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/cat.gif" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/yliu921" target="_blank"><span class="text-dark">Yifei Liu</span><small class="ml-1x">Tinker, ASIC engineer.</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+ -->
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2024/01/07/TFTP-for-Xilinx-ZCU106/" title="TFTP for Xilinx ZCU106"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2024/01/04/uid-euid-in-Linux/" title="What is uid, euid in Linux"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+    <!-- <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-77CZM18X5N', 'auto');
+ga('send', 'pageview');
+
+</script> -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-77CZM18X5N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-77CZM18X5N');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

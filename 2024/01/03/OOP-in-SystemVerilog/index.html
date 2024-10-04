@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>1. OOP in SystemVerilog | Home</title>
+  <meta name="description" content="OOP Terminology   Class: a basic building block containing routines and variables, it&#39;s analogue in Verilog is a module.   Object: an instance of the class. In Verilog, instanitate a module to use it">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. OOP in SystemVerilog">
+<meta property="og:url" content="https://yifeiliu.dev/2024/01/03/OOP-in-SystemVerilog/index.html">
+<meta property="og:site_name" content="Yifei Liu">
+<meta property="og:description" content="OOP Terminology   Class: a basic building block containing routines and variables, it&#39;s analogue in Verilog is a module.   Object: an instance of the class. In Verilog, instanitate a module to use it">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-01-04T01:22:27.000Z">
+<meta property="article:modified_time" content="2024-10-04T01:44:36.308Z">
+<meta property="article:author" content="Yifei Liu">
+<meta property="article:tag" content="SystemVerilog">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://yifeiliu.dev/2024/01/03/OOP-in-SystemVerilog/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Yifei Liu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/yliu921" target="_blank">
+          <img class="img-rotate" src="/images/cat.gif" width="128" height="128">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Yifei Liu</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Tinker, ASIC engineer.</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> United States</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Graphic/">Computer Graphic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/FPGA/">FPGA</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SystemVerilog-Tutorial/">SystemVerilog Tutorial</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Usage-of-Linux/">Usage of Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Using-pthread/">Using pthread</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/plan/">plan</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/FPGA/" style="font-size: 14px;">FPGA</a> <a href="/tags/Linux/" style="font-size: 13.5px;">Linux</a> <a href="/tags/Raterization/" style="font-size: 13px;">Raterization</a> <a href="/tags/SystemVerilog/" style="font-size: 13.5px;">SystemVerilog</a> <a href="/tags/TFTP/" style="font-size: 13px;">TFTP</a> <a href="/tags/Writing-Plan/" style="font-size: 13px;">Writing Plan</a> <a href="/tags/bash/" style="font-size: 13px;">bash</a> <a href="/tags/pthread/" style="font-size: 13px;">pthread</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">October 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a><span class="archive-list-count">11</span></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-OOP-in-SystemVerilog" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      1. OOP in SystemVerilog
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2024/01/03/OOP-in-SystemVerilog/" class="article-date">
+	  <time datetime="2024-01-04T01:22:27.000Z" itemprop="datePublished">2024-01-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/SystemVerilog-Tutorial/">SystemVerilog Tutorial</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/SystemVerilog/" rel="tag">SystemVerilog</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2024/01/03/OOP-in-SystemVerilog/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="oop-terminology"><a class="markdownIt-Anchor" href="#oop-terminology"></a> OOP Terminology</h2>
+<ul>
+<li>
+<p>Class: a basic building block containing routines and variables, it's analogue in Verilog is a <code>module</code>.</p>
+</li>
+<li>
+<p>Object: an instance of the class. In Verilog, instanitate a module to use it.</p>
+</li>
+<li>
+<p>Handle: a pointor to the object. In veriolog, it stands for the instance when refers to signal and methods from outstide the module.</p>
+</li>
+<li>
+<p>Property: a variable that holds data, such as a <code>reg</code> or <code>wire</code> in Verilog.</p>
+</li>
+<li>
+<p>Method: procedure code that manipulates variables, contained in tasks and functions. Verilog modules have <code>tasks</code> and <code>functions</code> plus <code>initial</code> and <code>always</code> blocks.</p>
+</li>
+<li>
+<p>Prototype: the head of a routine that shows the name, type and arugment list. The body of the routine contains the exectuable code.</p>
+</li>
+</ul>
+<p>In Verilog you build complex designs by creating modules and instantiating them hierarchically. In OOP you create classes and instantiate them (creating objects) to create a similar hierarchy.</p>
+<p>Following is an example of a class:</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Transaction;</span><br><span class="line">    <span class="keyword">bit</span> [<span class="number">31</span>:<span class="number">0</span>]addr, crc, data[<span class="number">8</span>]; <span class="comment">// Property</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">void</span> display <span class="comment">//Method</span></span><br><span class="line">        <span class="built_in">$display</span>(<span class="string">&quot;Transaction:%h&quot;</span>, addr);</span><br><span class="line">    <span class="keyword">endfunction</span>: display</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">void</span> calc_crc;</span><br><span class="line">        crc = addr ^ data<span class="variable">.xor</span>;</span><br><span class="line">    <span class="keyword">endfunction</span>:calc_crc</span><br><span class="line"></span><br><span class="line"><span class="keyword">endclass</span>:Transaction</span><br><span class="line"></span><br><span class="line">Transaction tr; <span class="comment">// Declare a handler, it&#x27;s a null</span></span><br><span class="line">Tr = <span class="keyword">new</span>(); <span class="comment">// Allocate a Transaction object</span></span><br></pre></td></tr></table></figure>
+<p><code>new</code> allocate the space for the BusTran, initializes the variables to the default value, <strong>0 for 2-state variables and X for 4-state ones</strong>, and returns the address where object is stored.<br />
+The <code>new</code> function not only allocates memory but also initialize the values.<br />
+We can also define the <code>new</code> function to set the values of variables.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> BusTrain;</span><br><span class="line">    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]addr, crc, data[<span class="number">8</span>];</span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">new</span>(<span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]addr=<span class="number">3</span>,d=<span class="number">5</span>); </span><br><span class="line">        <span class="comment">// does not have a type, as it always returns an objec of the same type</span></span><br><span class="line">        <span class="comment">// as the class</span></span><br><span class="line">        <span class="comment">// Sets addr and data to fixed values, but leaves crc as X.</span></span><br><span class="line">        <span class="comment">// SV allocate space for the object automatically.</span></span><br><span class="line">        <span class="keyword">this</span><span class="variable">.addr</span> = addr;</span><br><span class="line">        <span class="keyword">foreach</span>(data[i])</span><br><span class="line">            data[i] = d;</span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Driver;</span><br><span class="line">    BusTran bt;</span><br><span class="line">    <span class="keyword">function</span> <span class="keyword">new</span>(); <span class="comment">// Driver&#x27;s new function</span></span><br><span class="line">        bt = <span class="keyword">new</span>(); <span class="comment">// call the BusTran new function</span></span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line"><span class="keyword">endclass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    BusTran b;</span><br><span class="line">    b = <span class="keyword">new</span>(<span class="number">10</span>); <span class="comment">// addr is initialized to 10, but data is default 5.</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="new-vs-new"><a class="markdownIt-Anchor" href="#new-vs-new"></a> <code>new()</code> vs <code>new[]</code></h3>
+<p><code>new()</code> can take arguments for setting object values, while <code>new[]</code> only takes single value for the array size.</p>
+<h3 id="object-deallocation"><a class="markdownIt-Anchor" href="#object-deallocation"></a> Object deallocation</h3>
+<p>Garbage collection is the process of automatically freeing objects that are no longer referenced. SystemVerilog keeps tracking of the number of handles that point to it. When the last handle no longer references an object, SystemVerilog releases the memory for it.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BusTran b; <span class="comment">// a handle</span></span><br><span class="line">b = <span class="keyword">new</span>; <span class="comment">// calles new to construct an object, allocate the first object</span></span><br><span class="line">         <span class="comment">// e.g., b points to the object</span></span><br><span class="line">b = <span class="keyword">new</span>; <span class="comment">// Allocate the second one, free the first one</span></span><br><span class="line">b = <span class="literal">null</span>&#x27; <span class="comment">// Deallocate the second</span></span><br></pre></td></tr></table></figure>
+<p>Note the differences with C++:</p>
+<ul>
+<li>SV handle can only point to objects of one type. C++ a typical untyped pointer is only an address in memory.</li>
+<li>SV doesn’t allow any modification of a handle or using a handle of one type to refer to an object of another type.</li>
+<li>Garbage collection in C/C++ is manual, suffering from “memory leaks” when forgets deallocating objects.</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <!-- <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://yifeiliu.dev/2024/01/03/OOP-in-SystemVerilog/" title="1. OOP in SystemVerilog" target="_blank" rel="external">https://yifeiliu.dev/2024/01/03/OOP-in-SystemVerilog/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/yliu921" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/cat.gif" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/yliu921" target="_blank"><span class="text-dark">Yifei Liu</span><small class="ml-1x">Tinker, ASIC engineer.</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+ -->
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2024/01/04/uid-euid-in-Linux/" title="What is uid, euid in Linux"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2024/01/01/Why-use-pthread-cond-wait-in-a-loop/" title="Why use pthread_cond_wait in a loop"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="/atom.xml" target="_blank" title="Rss" ><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+    <!-- <script defer type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-77CZM18X5N', 'auto');
+ga('send', 'pageview');
+
+</script> -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-77CZM18X5N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-77CZM18X5N');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
